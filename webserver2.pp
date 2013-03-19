@@ -60,6 +60,13 @@ class mysql_server {
     require => Package["mysql-server"],
   }
 
+  # exec { "set-mysql-password":
+  #  path    => ["/bin", "/usr/bin"],
+  #  command => "mysqladmin -u user password 'hello'",
+  #  require => Service["mysqld"],
+  # }
+
+
 }
 
 class php {
