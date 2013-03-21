@@ -14,4 +14,6 @@ and apache configuration
 * Feb 28 cloning multiple files
 * March 5 successfully running multiple virtual hosts
 * March 11 clone sample directory and working with vhost successfully
+* March 21 integrated mysql into main webserver manifest
+* creates a db and mysql user
 
