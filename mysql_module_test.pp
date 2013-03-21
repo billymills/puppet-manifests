@@ -1,12 +1,14 @@
 $mysql_root_pw = 'puppet'
 
+# installs mysql server
 class { 'mysql::server': 
+  # set root password
   config_hash       => {
       root_password => 'puppet',
   }
-  # before    => Class['mysql'],
 }
 
+# creates database and user
 mysql::db { 'mydb':
     user     => 'myuser',
     password => 'mypass',
@@ -15,30 +17,10 @@ mysql::db { 'mydb':
     require  => Class['mysql::server'],
 }
 
+# creates user
 database_user {'billy@localhost':
   ensure        => present,
   password_hash => mysql_password('billy'),
   require       => Class['mysql::server'],
 }
 
-
-
-/*
-class { 'mysql': 
-  # before => Class['new_user'],
-}
-
-class new_user {
-  mysql::db { 'mydb':
-    user     => 'myuser',
-    password => 'mypass',
-    host     => 'localhost',
-    grant    => ['all'],
-  }
-}
-
-class { 'new_user': 
-  require => Class['mysql::server'],
-
-}
-*/

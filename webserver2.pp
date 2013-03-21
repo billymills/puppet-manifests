@@ -42,6 +42,7 @@ class apache_setup {
 
 }
 
+/*
 class mysql_server {
 
   # installs mlysql-server packages, configures my.cnf and starts msqld
@@ -66,8 +67,36 @@ class mysql_server {
   #  require => Service["mysqld"],
   # }
 
+  }
+*/
+
+class mysql {
+  
+  $mysql_root_pw = 'puppet'
+
+  class { 'mysql::server':
+    config_hash => {
+      root_password => 'puppet',
+    }
+  }
+
+  mysql::db { 'mydb':
+    user     => 'myuser',
+    password => 'mypass',
+    host     => 'localhost',
+    grant    => ['all'],
+    require  => Class['mysql::server'],
+  }
+
+  database_user { 'billy@localhost':
+    ensure        => present,
+    password_hash => mysql_password('billy'),
+    require       => Class['mysql::server'],
+  }
 
 }
+
+
 
 class php {
 
@@ -79,10 +108,10 @@ class php {
 
 # call the classes
 class { "apache_setup": 
-  before => Class['mysql_server'],
+  before => Class['mysql'],
 }
 
-class { "mysql_server": 
+class { "mysql": 
   before => Class['php'],
 }
 
